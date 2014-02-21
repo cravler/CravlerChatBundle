@@ -1,0 +1,13 @@
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+.body {
+    margin-top: 60px;
+}
+
+.overflowable {
+    height: 400px !important;
+    overflow: auto;
+}

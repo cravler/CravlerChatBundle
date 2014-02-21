@@ -1,0 +1,31 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+
+        <service id="cravler_chat.storage.user_storage"
+                 class="Cravler\ChatBundle\Storage\UserStorage">
+
+        </service>
+
+        <service id="cravler_chat.endpoint.chat"
+                 class="Cravler\ChatBundle\Endpoint\Chat">
+
+            <argument type="service" id="cravler_chat.storage.user_storage" />
+
+            <tag name="cravler_remote.endpoint" />
+        </service>
+
+        <service id="cravler_chat.connection.connection_handler"
+                 class="Cravler\ChatBundle\Connection\ConnectionHandler">
+
+            <argument type="service" id="cravler_chat.storage.user_storage" />
+
+            <tag name="cravler_remote.connection_handler" />
+        </service>
+    </services>
+
+</container>

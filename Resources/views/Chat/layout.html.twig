@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Angular + CravlerRemoteBundle">
+    <meta name="author" content="Sergei Vizel">
+
+    <title>Angular + CravlerRemoteBundle</title>
+
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="{{ asset('bundles/cravlerchat/css/app.css') }}">
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.10/angular.js"></script>
+    <script src="http://{{ app.request.host }}:{{ cravler_remote_config_app_port }}/browser.js"></script>
+    <script src="{{ asset('bundles/cravlerchat/js/app.js') }}"></script>
+    <script src="{{ asset('bundles/cravlerchat/js/services.js') }}"></script>
+    <script src="{{ asset('bundles/cravlerchat/js/controllers.js') }}"></script>
+    <script src="{{ asset('bundles/cravlerchat/js/filters.js') }}"></script>
+    <script src="{{ asset('bundles/cravlerchat/js/directives.js') }}"></script>
+    <script type="text/javascript">
+
+        CravlerRemote.init({
+            url: 'http://{{ app.request.host }}:{{ cravler_remote_config_app_port }}',
+            session: '{{ app.session.id }}',
+            rooms: {% render controller("CravlerRemoteBundle:Remote:rooms", { "request": app.request }) %},
+            token: function(data, callback) {
+                jQuery.ajax({
+                    type: "POST",
+                    url: '{{ path('cravler_remote_token') }}',
+                    data: data
+                }).done(function(token) {
+                    callback(token);
+                });
+            }
+        });
+
+    </script>
+</head>
+
+<body ng-init="loadScopes()">
+
+<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand">Angular + CravlerRemoteBundle</a>
+        </div>
+        <div class="collapse navbar-collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a data-toggle="modal" data-target="#changeNameModal">Change my name</a></li>
+                <li><a data-toggle="modal" data-target="#infoModal">About</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+{% block body %}{% endblock body %}
+
+</body>
+</html>

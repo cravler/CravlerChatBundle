@@ -1,0 +1,21 @@
+{
+    "name": "cravler/chat-bundle",
+    "type": "symfony-bundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sergei Vizel",
+            "email": "sergei.vizel@gmail.com",
+            "homepage": "http://github.com/cravler"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0",
+        "symfony/framework-bundle": "~2.3",
+        "cravler/remote-bundle": "@dev"
+    },
+    "autoload": {
+        "psr-0": { "Cravler\\ChatBundle": "" }
+    },
+    "target-dir": "Cravler/ChatBundle"
+}
