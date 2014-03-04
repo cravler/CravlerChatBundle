@@ -107,12 +107,11 @@ class ConnectionHandler implements ConnectionHandlerInterface
 
             $name = $this->userStorage->getName($remoteKey['session']);
 
-            $userStorage = $this->userStorage;
-            $connections = $this->connections;
-            $remote->wait(function() use ($userStorage, $connections, $remoteKey, $remote, $name) {
-                if (isset($connections[$remoteKey['session']]) && $connections[$remoteKey['session']] < 1) {
-                    unset($connections[$remoteKey['session']]);
-                    $userStorage->remove($remoteKey['session']);
+            $self = $this;
+            $remote->wait(function() use ($self, $remoteKey, $remote, $name) {
+                if (isset($self->connections[$remoteKey['session']]) && $self->connections[$remoteKey['session']] < 1) {
+                    unset($self->connections[$remoteKey['session']]);
+                    $self->userStorage->remove($remoteKey['session']);
 
                     $remote->dispatch(array(
                         'type' => 'cravler_chat.chat.user',
