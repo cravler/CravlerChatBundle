@@ -17,7 +17,8 @@ function AppCtrl($rootScope, $scope, chat, notification) {
 
     var scrollDown = function() {
         setTimeout(function() {
-            $('.messages').scrollTop($('.messages')[0].scrollHeight);
+            $('#chat-messages').animate({ scrollTop: $('#chat-messages-inner').height() }, 1000);
+            $('#chat-messages').getNiceScroll().resize();
         }, 50);
     };
 
@@ -25,7 +26,7 @@ function AppCtrl($rootScope, $scope, chat, notification) {
 
     $scope.mention = function (name) {
         $scope.message = '@' + name + ' ';
-        $('.input-message').focus();
+        $('#msg-box').focus();
     };
 
     $scope.changeName = function() {
@@ -56,15 +57,12 @@ function AppCtrl($rootScope, $scope, chat, notification) {
         var mention, me;
         var message = obj.data;
         mention = getMention(message.text);
-        if (mention)  {
-            me = 'alert-success'
-        } else {
-            me = 'alert-info';
-        }
         $scope.messages.push({
             user: message.user,
             text: message.text,
-            me: me
+            me: 'show',
+            cls: mention ? 'alert-info' : '',
+            icon: mention ? 'fa-lock' : 'fa-user'
         });
 
         scrollDown();
@@ -79,9 +77,9 @@ function AppCtrl($rootScope, $scope, chat, notification) {
         }
 
         $scope.messages.push({
-            user: 'System',
+            system: true,
             text: 'User ' + obj.data.oldName + ' is now known as ' + obj.data.newName + '.',
-            me: 'alert-warning'
+            me: 'offline al show'
         });
 
         scrollDown();
@@ -89,9 +87,9 @@ function AppCtrl($rootScope, $scope, chat, notification) {
 
     notification.on('cravler_chat.chat.user::join', function(obj) {
         $scope.messages.push({
-            user: 'System',
+            system: true,
             text: 'User ' + obj.data.name + ' has joined.',
-            me: 'alert-warning'
+            me: 'offline al show'
         });
 
         if ($scope.name !== obj.data.name && $scope.users.indexOf(obj.data.name) === -1) {
@@ -103,9 +101,9 @@ function AppCtrl($rootScope, $scope, chat, notification) {
 
     notification.on('cravler_chat.chat.user::left', function(obj) {
         $scope.messages.push({
-            user: 'System',
+            system: true,
             text: 'User ' + obj.data.name + ' has left.',
-            me: 'alert-warning'
+            me: 'offline al show'
         });
 
         var i, user;
@@ -129,7 +127,35 @@ function AppCtrl($rootScope, $scope, chat, notification) {
         }
     });
 
-//    $(function() {
+    $(function() {
 //        $('#changeNameModal').modal('show');
-//    });
+
+        $('#chat-messages').niceScroll({
+            zindex: 1060
+        });
+
+        $('.go-full-screen').click(function() {
+            var icon = $(this).find('i');
+            var backdrop = $('.white-backdrop');
+            var wbox = $(this).parents('.widget-box');
+
+            if(wbox.hasClass('widget-full-screen')) {
+                backdrop.fadeIn(200,function() {
+                    wbox.removeClass('widget-full-screen',function() {
+                        icon.removeClass('fa-compress');
+                        icon.addClass('fa-expand');
+                        backdrop.fadeOut(200);
+                    });
+                });
+            } else {
+                backdrop.fadeIn(200,function() {
+                    wbox.addClass('widget-full-screen',function() {
+                        icon.removeClass('fa-expand');
+                        icon.addClass('fa-compress');
+                        backdrop.fadeOut(200);
+                    });
+                });
+            }
+        });
+    });
 }

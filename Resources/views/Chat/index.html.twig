@@ -2,64 +2,91 @@
 
 {% block body %}
 
-<div class="body container" ng-controller="AppCtrl">
-
-    <div class="row">
-
-        <div class="col-md-10">
-            <div class="panel panel-primary">
-                <div class="panel-heading">Messages</div>
-                <div class="panel-body overflowable messages">
-                    <div class="alert" ng-repeat="message in messages" ng-class="message.me">
-                        {[{message.user}]}: {[{message.text}]}
+<div id="wrapper" ng-controller="AppCtrl">
+    <div id="content">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="widget-box widget-chat widget-full-screen1">
+                    <div class="widget-title">
+                    <span class="icon">
+                        <i class="fa fa-comments-o"></i>
+                    </span>
+                        <h5>Chat</h5>
+                        <div class="buttons">
+                            <a class="btn" data-toggle="modal" data-target="#changeNameModal">
+                                <i class="fa fa-pencil"></i> <span class="text">Change my name</span>
+                            </a>
+                            <a class="btn" data-toggle="modal" data-target="#infoModal">
+                                <i class="fa fa-info"></i> <span class="text">About</span>
+                            </a>
+                            <a class="btn go-full-screen">
+                                <i class="fa fa-expand"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="widget-content nopadding">
+                        <div class="chat-content panel-left">
+                            <div class="chat-messages" id="chat-messages">
+                                <div id="chat-messages-inner" class="chat-messages-inner">
+                                    <p ng-repeat="message in messages" ng-class="message.me">
+                                        <i class="fa fa-user" ng-class="message.icon" ng-show="message.user"></i>
+                                        <span class="msg-block" ng-class="message.cls" ng-show="message.user">
+                                            <strong>{[{message.user}]}</strong>
+                                            <span class="time"></span>
+                                            <span class="msg">{[{message.text}]}</span>
+                                        </span>
+                                        <span ng-show="message.system">{[{message.text}]}</span>
+                                    </p>
+                                </div>
+                            </div>
+                            <form ng-submit="sendMessage()">
+                                <div class="chat-message well">
+                                    <span class="input-box input-group">
+                                        <input ng-model="message" placeholder="Enter message here..." type="text" class="form-control input-small" name="msg-box" id="msg-box" />
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-success btn-small" type="button">Send</button>
+                                        </span>
+                                    </span>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="chat-users panel-right">
+                            <div class="panel-title"><h5>Online Users</h5></div>
+                            <div class="panel-content nopadding">
+                                <ul class="contact-list">
+                                    <li ng-repeat="user in users" class="online">
+                                        <a ng-click="mention(user)">
+                                            <i class="fa fa-user"></i> <span>{[{user}]}</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div>
-                <form ng-submit="sendMessage()" class="well form-search form-send-message">
-                    <div class="input-group input-group-lg">
-                        <span class="input-group-addon">@</span>
-                        <input ng-model="message" placeholder="Message" class="form-control input-message"/>
-                        <span class="input-group-btn">
-                            <button class="btn btn-success" type="submit">Send</button>
-                        </span>
-                    </div>
-                </form>
-            </div>
         </div>
-
-        <div class="col-md-2">
-            <div class="panel panel-primary">
-                <div class="panel-heading">Users</div>
-                <div class="panel-body overflowable users">
-                    <ul class="nav nav-pills nav-stacked">
-                        <li ng-repeat="user in users"> <a ng-click="mention(user)">{[{user}]}</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
     </div>
 
     <form ng-submit="changeName()">
-    <div id="changeNameModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" class="modal fade">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title" id="myModalLabel">Change your name</h4>
-                </div>
-                <div class="modal-body input-group-lg">
-                    <p>Your current user name is {[{name}]}</p>
-                    <input class="form-control" ng-model="newName"/>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Save changes</button>
+        <div id="changeNameModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="myModalLabel">Change your name</h4>
+                    </div>
+                    <div class="modal-body input-group-lg">
+                        <p>Your current user name is {[{name}]}</p>
+                        <input class="form-control" ng-model="newName"/>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
     </form>
 
     <div id="infoModal" tabindex="-1" role="dialog" aria-labelledby="infoModal" aria-hidden="true" class="modal fade">
@@ -78,6 +105,7 @@
             </div>
         </div>
     </div>
+
 </div>
 
 {% endblock body %}

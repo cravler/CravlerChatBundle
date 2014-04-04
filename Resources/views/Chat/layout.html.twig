@@ -1,21 +1,23 @@
 <!DOCTYPE html>
 <html lang="en" ng-app="myApp">
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="Angular + CravlerRemoteBundle">
     <meta name="author" content="Sergei Vizel">
 
-    <title>Angular + CravlerRemoteBundle</title>
+    <title>CravlerChatBundle</title>
 
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" />
     <link rel="stylesheet" href="{{ asset('bundles/cravlerchat/css/app.css') }}">
 
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script src="//code.jquery.com/ui/1.10.4/jquery-ui.min.js"></script>
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.10/angular.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery.nicescroll/3.5.1/jquery.nicescroll.min.js"></script>
     <script src="http://{{ app.request.host }}:{{ cravler_remote_config_app_port }}/browser.js"></script>
     <script src="{{ asset('bundles/cravlerchat/js/app.js') }}"></script>
     <script src="{{ asset('bundles/cravlerchat/js/services.js') }}"></script>
@@ -42,29 +44,11 @@
     </script>
 </head>
 
-<body ng-init="loadScopes()">
-
-<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-    <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand">Angular + CravlerRemoteBundle</a>
-        </div>
-        <div class="collapse navbar-collapse">
-            <ul class="nav navbar-nav navbar-right">
-                <li><a data-toggle="modal" data-target="#changeNameModal">Change my name</a></li>
-                <li><a data-toggle="modal" data-target="#infoModal">About</a></li>
-            </ul>
-        </div>
-    </div>
-</div>
+<body class="flat" ng-init="loadScopes()">
 
 {% block body %}{% endblock body %}
+
+<div class="white-backdrop"><!-- empty --></div>
 
 </body>
 </html>
