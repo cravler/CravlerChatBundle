@@ -2,6 +2,7 @@
 
 namespace Cravler\ChatBundle\Connection;
 
+use React\EventLoop\LoopInterface;
 use Cravler\RemoteBundle\Connection\ConnectionHandlerInterface;
 use Cravler\RemoteBundle\Security\Token;
 use Cravler\RemoteBundle\Proxy\RemoteProxy;
@@ -35,12 +36,12 @@ class ConnectionHandler implements ConnectionHandlerInterface
      * @param Token $token
      * @param RemoteProxy $remote
      */
-    public function handle($type, Token $token, RemoteProxy $remote)
+    public function handle($type, Token $token, RemoteProxy $remote, LoopInterface $loop)
     {
         if (ConnectionHandlerInterface::TYPE_CONNECT == $type) {
-            $this->onConnect($token, $remote);
+            $this->onConnect($token, $remote, $loop);
         } else if (ConnectionHandlerInterface::TYPE_DISCONNECT == $type) {
-            $this->onDisconnect($token, $remote);
+            $this->onDisconnect($token, $remote, $loop);
         }
     }
 
@@ -48,7 +49,7 @@ class ConnectionHandler implements ConnectionHandlerInterface
      * @param Token $token
      * @param RemoteProxy $remote
      */
-    private function onConnect(Token $token, RemoteProxy $remote)
+    private function onConnect(Token $token, RemoteProxy $remote, LoopInterface $loop)
     {
         $remoteKey = $token->getRemoteKey();
         if (isset($remoteKey['session']) && $remoteKey['session']) {
@@ -95,7 +96,7 @@ class ConnectionHandler implements ConnectionHandlerInterface
      * @param Token $token
      * @param RemoteProxy $remote
      */
-    private function onDisconnect(Token $token, RemoteProxy $remote)
+    private function onDisconnect(Token $token, RemoteProxy $remote, LoopInterface $loop)
     {
         $remoteKey = $token->getRemoteKey();
         if (isset($remoteKey['session']) && $remoteKey['session']) {
@@ -108,7 +109,7 @@ class ConnectionHandler implements ConnectionHandlerInterface
             $name = $this->userStorage->getName($remoteKey['session']);
 
             $self = $this;
-            $remote->wait(function() use ($self, $remoteKey, $remote, $name) {
+            $loop->addTimer(2, function() use ($self, $remoteKey, $remote, $name) {
                 if (isset($self->connections[$remoteKey['session']]) && $self->connections[$remoteKey['session']] < 1) {
                     unset($self->connections[$remoteKey['session']]);
                     $self->userStorage->remove($remoteKey['session']);
@@ -121,7 +122,7 @@ class ConnectionHandler implements ConnectionHandlerInterface
                         ),
                     ));
                 }
-            }, 2);
+            });
         }
     }
 }
